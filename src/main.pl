@@ -17,13 +17,10 @@ sub main {
     my $repos = $git->repos;
     my @repos_list = $repos->list_user($user);
 
-    foreach (@repos_list) {
-        my $this = $_;
-        my @lang_names = $repos->languages->($user, $this);
-        print $this;
-        foreach (@lang_names) {
-            my $this = $_;
-            print $this;
+    foreach my $this (@repos_list) {
+        my %lang_names = $repos->languages($user, $this->{name});
+        foreach my $lang_name (keys %lang_names) {
+            print "$this->{name}: $lang_name $lang_names{$lang_name}\n";
         }
     }
 }
