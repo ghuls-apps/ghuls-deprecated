@@ -13,6 +13,10 @@ sub main {
     my $user = <>;
     chomp $user;
 
+    print "Would you like to include forks in the calculations for $user?\nINCLUDING FORKS MAY MAKE THE CODE TAKE AN IMMENSE AMOUNT OF TIME, AND PROVIDE INACCURATE RESULTS. USE AT YOUR OWN RISK.\n(y/n)\n";
+    my $includeforks = <>;
+    chomp $includeforks;
+
     my @langs = ();
     my @secure = read_secure();
     my $git = Net::GitHub::V3->new(
@@ -20,12 +24,17 @@ sub main {
     );
     my $repos = $git->repos;
     my @repos_list = $repos->list_user($user);
+    my @forks = ();
 
     foreach my $this (@repos_list) {
-        my %lang_names = $repos->languages($user, $this->{name});
-        foreach my $lang_name (keys %lang_names) {
-            print "$this->{name}: $lang_name $lang_names{$lang_name}\n";
-            push @langs, $lang_name;
+        if ($this->{fork} == 1 and $includeforks =~ m/^n$/i) {
+            push @forks, $this;
+        } else {
+            my %lang_names = $repos->languages($user, $this->{name});
+            foreach my $lang_name (keys %lang_names) {
+                print "$this->{name}: $lang_name $lang_names{$lang_name}\n";
+                push @langs, $lang_name;
+            }
         }
     }
 
