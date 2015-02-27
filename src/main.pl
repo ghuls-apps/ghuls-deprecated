@@ -7,6 +7,7 @@ use List::MoreUtils;
 
 my $ERROR = $!;
 
+#This method has an excessive amount of fruity loops.
 sub main {
     my $sum = 0;
     print 'Enter a username: ';
@@ -26,13 +27,13 @@ sub main {
     my @repos_list = $repos->list_user($user);
     my @forks = ();
 
-    foreach my $this (@repos_list) {
-        if ($this->{fork} == 1 and $includeforks =~ m/^n$/i) {
-            push @forks, $this;
+    foreach my $repo (@repos_list) {
+        if ($repo->{fork} == 1 and $includeforks =~ m/^n$/i) {
+            push @forks, $repo;
         } else {
-            my %lang_names = $repos->languages($user, $this->{name});
+            my %lang_names = $repos->languages($user, $repo->{name});
             foreach my $lang_name (keys %lang_names) {
-                print "$this->{name}: $lang_name $lang_names{$lang_name}\n";
+                print "$repo->{name}: $lang_name $lang_names{$lang_name}\n";
                 push @langs, $lang_name;
             }
         }
@@ -49,12 +50,29 @@ sub main {
             my %lang_names = $repos->languages($user, $repo->{name});
             if (exists $lang_names{$lang}) {
                 $sum += $lang_names{$lang};
+                print "$lang: $sum\n";
+                push @lang_sums, $sum;
+                $sum = 0;
             }
         }
-        print "$lang: $sum\n";
-        push @lang_sums, $sum;
-        $sum = 0;
     }
+
+    my $lang_sums_total = 0;
+    $lang_sums_total += $_ for @lang_sums;
+    print "Total: $lang_sums_total\n";
+
+    my @percents = ();
+    foreach my $sum (@lang_sums) {
+        my $percent = calc_percentage($sum, $lang_sums_total);
+        print $_ for @langs . ": $percent\n";
+        push @percents, $percent;
+    }
+}
+
+sub calc_percentage {
+    my ($part, $whole) = @_;
+    my $percent = $part / $whole * 100;
+    return "$percent %";
 }
 
 sub read_secure {
