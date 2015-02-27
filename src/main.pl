@@ -46,13 +46,12 @@ sub main {
             if ($repo->{fork} == 0) {
                 my %lang_names = $repos->languages($user, $repo->{name});
                 if (exists $lang_names{$lang}) {
-                    print "$lang: $lang_names{$lang}... ";
                     $sum += $lang_names{$lang};
-                    print "$lang: $sum\n";
-                    push @lang_sums, $sum;
                 }
             }
         }
+        print "$lang: $sum\n";
+        push @lang_sums, $sum;
         $sum = 0;
     }
 
