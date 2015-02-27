@@ -41,6 +41,7 @@ sub main {
     print "$user has repositories written in $num_langs langauges: $join\n";
 
     my @lang_sums = ();
+    my @percents = ();
     foreach my $lang (@langs) {
         foreach my $repo (@repos_list) {
             if ($repo->{fork} == 0) {
@@ -55,25 +56,24 @@ sub main {
         $sum = 0;
     }
 
+
     my $lang_sums_total = 0;
     $lang_sums_total += $_ for @lang_sums;
     print "Total: $lang_sums_total\n";
 
-    my @percents = ();
-    foreach my $sum (@lang_sums) {
+    foreach my $lang (@langs) {
+        foreach my $sum (@lang_sums) {
+            my $percent = calc_percentage($sum, $lang_sums_total);
+            push @percents, $percent;
+        }
+    }
+
+    @percents = List::MoreUtils::uniq(@percents);
+    print scalar @percents;
+
+    foreach my $percent (@percents) {
         foreach my $lang (@langs) {
-            foreach my $repo (@repos_list) {
-                if ($repo->{fork} == 0) {
-                    my %lang_names = $repos->languages($user, $repo->{name});
-                    if (exists $lang_names{$lang}) {
-                        my $percent = calc_percentage($sum, $lang_sums_total);
-                        push @percents, $percent;
-                    }
-                    foreach my $percent (@percents) {
-                        print "$lang: $percent ($repo->{name})\n";
-                    }
-                }
-            }
+            print "$lang: $percent\n";
         }
     }
 }
@@ -81,6 +81,7 @@ sub main {
 sub calc_percentage {
     my ($part, $whole) = @_;
     my $percent = $part / $whole * 100;
+    $percent = sprintf "%.2f", $percent; #round to 2 decimal places
     return "$percent %";
 }
 
