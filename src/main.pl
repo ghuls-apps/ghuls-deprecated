@@ -42,8 +42,8 @@ sub main {
     
     {
         my $num_langs = keys %all_languages;
-        local $" = ", ";
-        print "$user has repositories written in $num_langs languages: @{[ keys %all_languages ]}\n";
+        my $join = join ', ', keys %all_languages;
+        print "$user has repositories written in $num_langs languages: $join\n";
     }
 
     my $all_sum = sum0 values %all_languages;
@@ -58,7 +58,7 @@ sub calc_percentage {
     my ($part, $whole) = @_;
     my $percent = $part / $whole * 100;
     $percent = sprintf "%.2f", $percent; #round to 2 decimal places
-    return "$percent %";
+    return $percent;
 }
 
 sub read_secure {
