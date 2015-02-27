@@ -1,4 +1,16 @@
 {
   "name": "ghuls",
-  "main": "index.html"
+  "description": "GitHub User Language Statistics",
+  "version": "0.1",
+  "main": "index.html",
+  "window": {
+    "show": false,
+    "toolbar": false,
+    "frame": false,
+    "position": "center",
+    "width": 500,
+    "height": 500,
+    "min_width": 300,
+    "min_height": 300
+  }
 }
