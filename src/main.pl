@@ -4,6 +4,7 @@ use strict;
 use Data::Dumper;
 use Net::GitHub::V3;
 use List::MoreUtils;
+use List::Util qw(sum0);
 
 my $ERROR = $!;
 
@@ -14,68 +15,43 @@ sub main {
     my $user = <>;
     chomp $user;
 
-    my @langs = ();
     my @secure = read_secure();
     my $git = Net::GitHub::V3->new(
         access_token => $secure[0]
     );
     my $repos = $git->repos;
     my @repos_list = $repos->list_user($user);
-    my @forks = ();
+    my @forks;
+    
+    my %all_languages;
 
     foreach my $repo (@repos_list) {
         if ($repo->{fork} == 1) {
             push @forks, $repo;
         } else {
             my %lang_names = $repos->languages($user, $repo->{name});
+            $all_languages{$_} += $lang_names{$_} for keys %lang_names;
+            
+            # Drop this if you don't need it any more
             foreach my $lang_name (keys %lang_names) {
                 print "$repo->{name}: $lang_name $lang_names{$lang_name}\n";
-                push @langs, $lang_name;
             }
         }
     }
 
-    @langs = List::MoreUtils::uniq(@langs);
-    my $join = join ', ', @langs;
-    my $num_langs = scalar @langs;
-    print "$user has repositories written in $num_langs langauges: $join\n";
-
-    my @lang_sums = ();
-    my @percents = ();
-    foreach my $lang (@langs) {
-        foreach my $repo (@repos_list) {
-            if ($repo->{fork} == 0) {
-                my %lang_names = $repos->languages($user, $repo->{name});
-                if (exists $lang_names{$lang}) {
-                    $sum += $lang_names{$lang};
-                }
-            }
-        }
-        print "$lang: $sum\n";
-        push @lang_sums, $sum;
-        $sum = 0;
+    
+    {
+        my $num_langs = keys %all_languages;
+        local $" = ", ";
+        print "$user has repositories written in $num_langs languages: @{[ keys %all_languages ]}\n";
     }
 
+    my $all_sum = sum0 values %all_languages;
+    print "Total: $all_sum\n";
 
-    my $lang_sums_total = 0;
-    $lang_sums_total += $_ for @lang_sums;
-    print "Total: $lang_sums_total\n";
-
-    foreach my $lang (@langs) {
-        foreach my $sum (@lang_sums) {
-            my $percent = calc_percentage($sum, $lang_sums_total);
-            push @percents, $percent;
-        }
-    }
-
-    @percents = List::MoreUtils::uniq(@percents);
-    print scalar @percents;
-
-    foreach my $percent (@percents) {
-        foreach my $lang (@langs) {
-            print "$lang: $percent\n";
-        }
-    }
+    my %percents = map { $_ => calc_percentage($all_languages{$_}, $all_sum) } keys %all_languages;
+    
+    print "$_: $percents{$_}%" for keys %percents;
 }
 
 sub calc_percentage {
