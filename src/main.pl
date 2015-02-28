@@ -22,7 +22,7 @@ sub main {
     my $repos = $git->repos;
     my @repos_list = $repos->list_user($user);
     my @forks;
-    
+
     my %all_languages;
 
     foreach my $repo (@repos_list) {
@@ -31,7 +31,7 @@ sub main {
         } else {
             my %lang_names = $repos->languages($user, $repo->{name});
             $all_languages{$_} += $lang_names{$_} for keys %lang_names;
-            
+
             # Drop this if you don't need it any more
             foreach my $lang_name (keys %lang_names) {
                 print "$repo->{name}: $lang_name $lang_names{$lang_name}\n";
@@ -39,7 +39,7 @@ sub main {
         }
     }
 
-    
+
     {
         my $num_langs = keys %all_languages;
         my $join = join ', ', keys %all_languages;
@@ -50,8 +50,8 @@ sub main {
     print "Total: $all_sum\n";
 
     my %percents = map { $_ => calc_percentage($all_languages{$_}, $all_sum) } keys %all_languages;
-    
-    print "$_: $percents{$_}%" for keys %percents;
+
+    print "$_: $percents{$_}%\n" for keys %percents;
 }
 
 sub calc_percentage {
