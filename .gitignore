@@ -1,1 +1,5 @@
 secure.txt
+node_modules/
+tmp/
+*.nw
+*.zip

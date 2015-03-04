@@ -1,0 +1,9 @@
+{
+    "author": "Eli Foster <elifosterwy@gmail.com>",
+    "name": "ghuls",
+    "description": "GitHub User Language Statistics",
+    "version": "0.0.1",
+    "repository": "https://github.com/elifoster/ghuls",
+    "dependencies": {},
+    "main": "index.html"
+}
