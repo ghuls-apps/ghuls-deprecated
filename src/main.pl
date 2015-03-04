@@ -5,10 +5,10 @@ use Data::Dumper;
 use Net::GitHub::V3;
 use List::MoreUtils;
 use List::Util qw(sum0);
+use JSON;
 
 my $ERROR = $!;
 
-#This method has an excessive amount of fruity loops.
 sub main {
     my $sum = 0;
     print 'Enter a username: ';
@@ -40,11 +40,9 @@ sub main {
     }
 
 
-    {
-        my $num_langs = keys %all_languages;
-        my $join = join ', ', keys %all_languages;
-        print "$user has repositories written in $num_langs languages: $join\n";
-    }
+    my $num_langs = keys %all_languages;
+    my $join = join ', ', keys %all_languages;
+    print "$user has repositories written in $num_langs languages: $join\n";
 
     my $all_sum = sum0 values %all_languages;
     print "Total: $all_sum\n";
@@ -52,6 +50,13 @@ sub main {
     my %percents = map { $_ => calc_percentage($all_languages{$_}, $all_sum) } keys %all_languages;
 
     print "$_: $percents{$_}%\n" for keys %percents;
+
+    #If necessary by the JavaScript, use %percents instead.
+    my $json = encode_json \%all_languages;
+
+    open my $fh, '>', "$user.json" or die $ERROR;
+    print $fh $json;
+    close $fh;
 }
 
 sub calc_percentage {
