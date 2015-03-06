@@ -3,13 +3,15 @@
     "version": "0.0.1",
     "description": "GitHub User Language Statistics (GHULS) visualization",
     "author": "Eli Foster <elifosterwy@gmail.com>",
-    "contributors": [{
-        "name": "Eli Foster",
-        "email": "elifosterwy@gmail.com"
-    },{
-        "name": "Alastair McGowan-Douglas",
-        "email": "al@podcats.in"
-    }
+    "contributors": [
+        {
+            "name": "Eli Foster",
+            "email": "elifosterwy@gmail.com"
+        },
+        {
+            "name": "Alastair McGowan-Douglas",
+            "email": "al@podcats.in"
+        }
     ],
     "main": "index.js",
     "repository": {
