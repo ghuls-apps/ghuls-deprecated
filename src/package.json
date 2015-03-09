@@ -2,14 +2,14 @@
     "name": "ghuls",
     "version": "0.0.1",
     "description": "GitHub User Language Statistics (GHULS) visualization",
-    "keywords": {
+    "keywords": [
         "github",
         "statistics",
         "stats",
         "visualization",
         "language",
         "data"
-    },
+    ],
     "homepage": "https://elifoster.github.io/projects/ghuls/",
     "bugs": {
         "url": "https://github.com/elifoster/GHULS/issues",
