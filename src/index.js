@@ -2,10 +2,11 @@ var fs = require('fs');
 var nw = require('nw');
 
 function handleUsername() {
-    if (form.username.value == "") {
+    if (form.username.value === "") {
         alert("You gotta provide input homie");
     } else {
-        var input = document.form.username.value
+        var input = document.form.username.value;
+        input.replace(/\uB200/g, '');
         
         //var jsonText = '{ "inputInfo": [' + 
             //'{"loginUsername":"' + loginUsernamevalue + '"},' +
@@ -16,7 +17,7 @@ function handleUsername() {
             //"loginUsername":loginUsernameValue,
             //"loginPassword":loginPasswordValue,
             "analyzeUsername":input
-        }
+        };
         
         var outputFile = 'tmp/data.json';
         
