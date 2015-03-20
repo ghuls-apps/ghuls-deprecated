@@ -54,7 +54,7 @@ sub main {
     #If necessary by the JavaScript, use %percents instead.
     my $json = encode_json \%all_languages;
 
-    open my $fh, '>', "$user.json" or die $ERROR;
+    open my $fh, '>', "tmp/$user.json" or die $ERROR;
     print $fh $json;
     close $fh;
 }
