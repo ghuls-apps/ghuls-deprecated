@@ -6,7 +6,7 @@ function handleUsername() {
         alert("You gotta provide input homie");
     } else {
         var input = document.form.username.value;
-        input.replace(/\uB200/g, '');
+        input.replace(/\\uB200/g, '');
         
         //var jsonText = '{ "inputInfo": [' + 
             //'{"loginUsername":"' + loginUsernamevalue + '"},' +
