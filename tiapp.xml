@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<ti:app xmlns:ti='http://ti.appcelerator.org'>
+<id>com.elifoster.ghuls</id>
+<name>GHULS</name>
+<version>1.0.0</version>
+<publisher>Eli Foster</publisher>
+<url>http//elifoster.github.io/projects/ghuls</url>
+<icon>default_app_logo.png</icon>
+<copyright>2015 by Eli Foster</copyright>
+
+<window>
+<id>initial</id>
+<title>GHULS</title>
+<url>app://index.html</url>
+<width>700</width>
+<max-width>3000</max-width>
+<min-width>0</min-width>
+<height>500</height>
+<max-height>3000</max-height>
+<min-height>0</min-height>
+<fullscreen>false</fullscreen>
+<resizable>true</resizable>
+<chrome scrollbars="true">true</chrome>
+<maximizable>true</maximizable>
+<minimizable>true</minimizable>
+<closeable>true</closeable>
+</window>
+</ti:app>
