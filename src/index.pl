@@ -1,3 +1,4 @@
+package GHULS;
 use warnings;
 use diagnostics;
 use strict;
@@ -6,20 +7,51 @@ use Net::GitHub::V3;
 use List::MoreUtils;
 use List::Util qw(sum0);
 use JSON;
+use Term::ReadKey;
 
 my $ERROR = $!;
 
 sub main {
     my $sum = 0;
-    print 'Enter a username: ';
+
+    print "Would you like to use an auth key or login? (1/2)\n";
+    my $authoruser = <>;
+    chomp $authoruser;
+
+    #my @secure = read_secure();
+    if ($authoruser eq '1') {
+        print "Please enter your auth code. This will never be shown to anyone, not even the developer of this software: \n";
+        ReadMode 2;
+        my $auth = <>;
+        ReadMode 0;
+        chomp $auth;
+        our $git = Net::GitHub::V3->new(
+            access_token => $auth
+        );
+    }
+    if ($authoruser eq '2') {
+        print 'Please enter your username: ';
+        my $authuser = <>;
+        chomp $authuser;
+        print "Please enter your password. This will never be shown to anyone, not even the developer of this software: \n";
+        ReadMode 2;
+        my $pass = <>;
+        ReadMode 0;
+        chomp $pass;
+        our $git = Net::GitHub::V3->new(
+            login => $authuser,
+            pass => $pass
+        );
+    }
+    if ($authoruser ne '1' and $authoruser ne '2') {
+        die 'That is not valid.';
+    }
+
+    print 'Enter a username to analyze: ';
     my $user = <>;
     chomp $user;
 
-    my @secure = read_secure();
-    my $git = Net::GitHub::V3->new(
-        access_token => $secure[0]
-    );
-    my $repos = $git->repos;
+    my $repos = $GHULS::git->repos;
     my @repos_list = $repos->list_user($user);
     my @forks;
 
