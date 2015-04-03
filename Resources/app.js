@@ -10,10 +10,10 @@ function exit() {
 }
 
 function handleUsername(username) {
-    if (username === "") {
+    if (username.value === "") {
         alert("Please provide a username");
     } else {
-        var input = document.username;
+        var input = document.username.value;
         input.replace(/\\uB200/g, '');
         
         var jsonObject = {
@@ -22,7 +22,7 @@ function handleUsername(username) {
             "analyzeUsername":input
         };
         
-        writeToFile(username, JSON.stringify(jsonObject, null, 4);
+        writeToFile(username.value, JSON.stringify(jsonObject, null, 4);
     }
 }
 
