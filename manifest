@@ -1,8 +1,8 @@
 #appname:GHULS
 #appid:com.elifoster.ghuls
 #publisher:Eli Foster
-#image:default_app_logo.png
-#url:http//elifoster.github.io/projects/ghuls
+#image:app_logo.png
+#url:http//elifoster.github.io/
 #guid:845e9c3c-c9ff-4ad4-afdf-9638092f044f
 #desc:GitHub User Language Statistics
 #type:desktop
