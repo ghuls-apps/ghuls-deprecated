@@ -9,8 +9,8 @@ function exit() {
     }
 }
 
-function handleUsername(username) {
-    var input = username.value;
+function handleUsername() {
+    var input = document.usernameinputform.usernameinputtext.value;
     if (input === "") {
         window.alert("Please provide a username");
     } else {
@@ -23,9 +23,6 @@ function handleUsername(username) {
         };
 
         writeToFile(input, JSON.stringify(jsonObject, null, 4);
-        Ti.App.stderr("username.value: " + username.value);
-        Ti.App.stderr("username: " + username);
-        Ti.App.stderr("document.username.value: " + document.username.value);
     }
 }
 
