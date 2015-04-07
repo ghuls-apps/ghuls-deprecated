@@ -5,7 +5,7 @@
 <version>1.0.0</version>
 <publisher>Eli Foster</publisher>
 <url>http//elifoster.github.io/</url>
-<icon>app_logo.png</icon>
+<icon>default_app_logo.png</icon>
 <copyright>2015 by Eli Foster</copyright>
 
 <window>
@@ -13,10 +13,10 @@
 <title>GHULS</title>
 <url>app://index.html</url>
 <width>700</width>
-<max-width>3000</max-width>
+<max-width>650</max-width>
 <min-width>0</min-width>
 <height>500</height>
-<max-height>3000</max-height>
+<max-height>675</max-height>
 <min-height>0</min-height>
 <fullscreen>false</fullscreen>
 <resizable>true</resizable>

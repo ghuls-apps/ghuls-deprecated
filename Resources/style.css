@@ -1,3 +1,10 @@
+@font-face {
+  font-family: 'Lato';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Lato-Light'), url("Lato-Light.woff") format("woff");
+}
+
 html {
   margin: 0px;
   padding: 0px;
@@ -5,22 +12,67 @@ html {
 }
 
 body {
-  margin: 0px;
+  margin: 10px 10px;
   padding: 0px;
+  font-size: 15px;
+  background-color: #006B54;
 }
 
 div#inner-content {
-  background-color: #006B54;
   width: 100%;
   height: 100%;
+  display: inline-block;
+  position: relative;
+  padding: 0;
+  float: left;
 }
 
-input[type=text] {
-  padding: 0px;
-  position: relative;
+input[type="text"] {
+  font-family: "Lato";
+  font: "Lato";
+  width: 0px;
+  height: 60px;
+  position: absolute;
+  padding: 3px;
+  padding-right: 60px;
+  display: inline-block;
+  top: 0;
+  right: 0;
+  background: none;
+  z-index: 3;
   outline: none;
-  border: 1px solid;
-  border-color: #95a898;
-  background-color: #bbd2be;
-  font-size: 12px;
+  border: none;
+  color: #95a898;
+  font-size: 55px;
+  font-weight: 100;
+  z-index: 3;
+  transition: width .4s cubic-bezier(0.000, 0.795, 0.000, 1.000);
+  cursor: pointer;
+}
+
+input[type="text"]:focus:hover {}
+
+input[type="text"]:focus {
+  width: 700px;
+  z-index: 1;
+  cursor: text;
+}
+
+input[type="submit"] {
+  height: 67px;
+  width: 63px;
+  display: inline-block;
+  border: none;
+  position: absolute;
+  background: url(https://cdn.cine.io/images/code-logos/github-logo.png);
+  top: 0;
+  right: 0;
+  z-index: 2;
+  cursor: pointer;
+  opacity: 0.4;
+  transition: opacity .4s ease;
+}
+
+input[type="submit"]:hover {
+  opacity: 0.8;
 }
