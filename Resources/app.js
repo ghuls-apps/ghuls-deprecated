@@ -9,11 +9,11 @@ function exit() {
     }
 }
 
-function handleUsername(username) {
-    if (username.value === "") {
+function handleUsername() {
+    var input = document.usernameinputform.usernameinputtext.value;
+    if (input === "") {
         window.alert("Please provide a username");
     } else {
-        var input = document.username.value;
         input.replace(/\\uB200/g, '');
 
         var jsonObject = {
@@ -22,10 +22,7 @@ function handleUsername(username) {
             "analyzeUsername":input
         };
 
-        writeToFile(username.value, JSON.stringify(jsonObject, null, 4);
-        Ti.App.stderr("username.value: " + username.value);
-        Ti.App.stderr("username: " + username);
-        Ti.App.stderr("document.username.value: " + document.username.value);
+        writeToFile(input, JSON.stringify(jsonObject, null, 4);
     }
 }
 
