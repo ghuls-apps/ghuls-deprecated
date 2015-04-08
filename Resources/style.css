@@ -2,7 +2,7 @@
   font-family: 'Lato';
   font-style: normal;
   font-weight: 300;
-  src: local('Lato-Light'), url("Lato-Light.woff") format("woff");
+  src: url("Lato-Light.svg") format("svg");
 }
 
 html {
