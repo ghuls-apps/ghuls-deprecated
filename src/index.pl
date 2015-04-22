@@ -5,7 +5,7 @@ use strict;
 use Data::Dumper;
 use Net::GitHub::V3;
 use List::MoreUtils;
-use List::Util qw(sum0);
+use List::Util;
 use JSON;
 use Term::ReadKey;
 
@@ -87,7 +87,7 @@ sub main {
     my $join = join ', ', keys %all_languages;
     print "$user has repositories written in $num_langs languages: $join\n";
 
-    my $all_sum = sum0 values %all_languages;
+    my $all_sum = List::Util->sum0(values %all_languages);
     print "Total: $all_sum\n";
 
     my %percents = map { $_ => calc_percentage($all_languages{$_}, $all_sum) } keys %all_languages;
