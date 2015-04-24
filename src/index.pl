@@ -8,6 +8,7 @@ use List::MoreUtils;
 use List::Util;
 use JSON;
 use Term::ReadKey;
+use GHULS::Gui;
 
 my $ERROR = $!;
 
@@ -100,6 +101,8 @@ sub main {
     open my $fh, '>', "tmp/$user.json" or die $ERROR;
     print $fh $json;
     close $fh;
+    my $app = GHULS::Gui->new();
+    $app->MainLoop();
 }
 
 sub calc_percentage {
