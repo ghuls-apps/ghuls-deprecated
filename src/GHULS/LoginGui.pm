@@ -1,4 +1,4 @@
-package GHULS::Gui;
+package GHULS::LoginGui;
 use Wx;
 use base 'Wx::App';
 
