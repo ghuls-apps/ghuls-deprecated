@@ -12,6 +12,11 @@ use GHULS::Gui;
 
 my $ERROR = $!;
 
+sub main_with_gui {
+    my $app = GHULS::Gui->new();
+    $app->MainLoop();
+}
+
 sub main {
     my $sum = 0;
     my $login_loop_control = 0;
@@ -101,8 +106,6 @@ sub main {
     open my $fh, '>', "tmp/$user.json" or die $ERROR;
     print $fh $json;
     close $fh;
-    my $app = GHULS::Gui->new();
-    $app->MainLoop();
 }
 
 sub calc_percentage {
@@ -121,5 +124,18 @@ sub read_secure {
     return @lines;
 }
 
-main();
+print "main or main_with_gui? (1/2)\n";
+my $main = <>;
+chomp $main;
+
+if ($main eq '1') {
+    main();
+    exit 0;
+} elsif ($main eq '2') {
+    main_with_gui();
+    exit 0;
+} else {
+    die "the fuck bitch";
+}
+
 exit 0;
