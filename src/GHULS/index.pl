@@ -13,8 +13,8 @@ use GHULS::Gui;
 my $ERROR = $!;
 
 sub main_with_gui {
-    my $app = GHULS::Gui->new();
-    $app->MainLoop();
+    my $login = GHULS::LoginGui->new();
+    $login->MainLoop();
 }
 
 sub main {
