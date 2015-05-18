@@ -8,13 +8,25 @@ use List::MoreUtils;
 use List::Util;
 use JSON;
 use Term::ReadKey;
-use GHULS::Gui;
+use GHULS::LoginGui;
 
 my $ERROR = $!;
 
 sub main_with_gui {
     my $login = GHULS::LoginGui->new();
     $login->MainLoop();
+}
+
+sub login {
+    open my $fh, '<', 'login.txt';
+    my @filelines = <$fh>;
+    close $fh;
+    chomp @filelines;
+    our $git = Net::GitHub::V3->new(
+        login => $filelines[0],
+        pass => $filelines[1]
+    ) or return 1;
+    return 0;
 }
 
 sub main {
