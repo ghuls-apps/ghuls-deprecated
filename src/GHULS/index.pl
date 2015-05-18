@@ -29,6 +29,11 @@ sub login {
     return 0;
 }
 
+sub analyze {
+    my ($username) = @_;
+    # TODO: Rewrite main() here to allow for the data to be sent to the GUI
+}
+
 sub main {
     my $sum = 0;
     my $login_loop_control = 0;
