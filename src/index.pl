@@ -1,4 +1,3 @@
-package GHULS;
 use warnings;
 use diagnostics;
 use strict;
@@ -9,30 +8,9 @@ use List::Util;
 use JSON;
 use Term::ReadKey;
 use GHULS::LoginGui;
+use GHULS::GHULS;
 
 my $ERROR = $!;
-
-sub main_with_gui {
-    my $login = GHULS::LoginGui->new();
-    $login->MainLoop();
-}
-
-sub login {
-    open my $fh, '<', 'login.txt';
-    my @filelines = <$fh>;
-    close $fh;
-    chomp @filelines;
-    our $git = Net::GitHub::V3->new(
-        login => $filelines[0],
-        pass => $filelines[1]
-    ) or return 1;
-    return 0;
-}
-
-sub analyze {
-    my ($username) = @_;
-    # TODO: Rewrite main() here to allow for the data to be sent to the GUI
-}
 
 sub main {
     my $sum = 0;
@@ -55,7 +33,7 @@ sub main {
                 access_token => $auth
             ) or $login_loop_control = 0;
         }
-        
+
         if ($authoruser eq '2') {
             $login_loop_control = 2;
             print 'Please enter your username: ';
@@ -71,11 +49,11 @@ sub main {
                 pass => $pass
             ) or $login_loop_control = 0;
         }
-    
+
         if ($authoruser ne '1' and $authoruser ne '2') {
             $login_loop_control = 0;
         }
-        
+
         if ($login_loop_control == 1 or $login_loop_control == 2) {
             last;
         }
@@ -132,24 +110,15 @@ sub calc_percentage {
     return $percent;
 }
 
-sub read_secure {
-    my $file = 'secure.txt';
-    open my $fh, '<', $file or die "Could not open '$file' $ERROR\n";
-    my @lines = <$fh>;
-    close $fh;
-    chomp @lines;
-    return @lines;
-}
-
 print "main or main_with_gui? (1/2)\n";
 my $main = <>;
 chomp $main;
 
 if ($main eq '1') {
-    main();
+    GHULS::GHULS->main();
     exit 0;
 } elsif ($main eq '2') {
-    main_with_gui();
+    GHULS::GHULS->main_with_gui();
     exit 0;
 } else {
     die "the fuck bitch";
