@@ -63,7 +63,7 @@ sub main {
     my $user = <>;
     chomp $user;
 
-    my $repos = $GHULS::git->repos;
+    my $repos = $GHULS::Utility::git->repos;
     my @repos_list = $repos->list_user($user);
     my @forks;
 
@@ -103,6 +103,11 @@ sub main {
     close $fh;
 }
 
+sub main_with_gui {
+    my $login = GHULS::LoginGui->new();
+    $login->MainLoop();
+}
+
 sub calc_percentage {
     my ($part, $whole) = @_;
     my $percent = $part / $whole * 100;
@@ -115,11 +120,10 @@ my $main = <>;
 chomp $main;
 
 if ($main eq '1') {
-    GHULS::Utility->main();
+    main();
     exit 0;
 } elsif ($main eq '2') {
-    GHULS::Utility->main_with_gui();
-    exit 0;
+    main_with_gui();
 } else {
     die "the fuck bitch";
 }

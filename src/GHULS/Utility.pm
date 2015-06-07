@@ -5,11 +5,6 @@ use strict;
 
 my $ERROR = $!;
 
-sub main_with_gui {
-    my $login = GHULS::LoginGui->new();
-    $login->MainLoop();
-}
-
 sub login {
     open my $fh, '<', 'login.txt';
     my @filelines = <$fh>;
