@@ -1,4 +1,4 @@
-package GHULS::GHULS;
+package GHULS::Utility;
 use warnings;
 use diagnostics;
 use strict;

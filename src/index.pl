@@ -8,7 +8,7 @@ use List::Util;
 use JSON;
 use Term::ReadKey;
 use GHULS::LoginGui;
-use GHULS::GHULS;
+use GHULS::Utility;
 
 my $ERROR = $!;
 
@@ -115,10 +115,10 @@ my $main = <>;
 chomp $main;
 
 if ($main eq '1') {
-    GHULS::GHULS->main();
+    GHULS::Utility->main();
     exit 0;
 } elsif ($main eq '2') {
-    GHULS::GHULS->main_with_gui();
+    GHULS::Utility->main_with_gui();
     exit 0;
 } else {
     die "the fuck bitch";
