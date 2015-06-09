@@ -9,6 +9,9 @@ use List::Util;
 use JSON;
 use Term::ReadKey;
 
+use Gtk2;
+use Glib qw/TRUE FALSE/;
+
 my $ERROR = $!;
 
 sub main {
@@ -118,5 +121,53 @@ sub read_secure {
     return @lines;
 }
 
-main();
-exit 0;
+sub delete_event {
+    return FALSE;
+    exit 0;
+}
+
+sub use_un_pw {
+    
+}
+
+sub use_code {
+
+}
+
+sub gui {
+    Gtk2->init();
+    
+    my $which_window = Gtk2::Window->new('toplevel');
+    
+    $which_window->signal_connect(
+        delete_event => delete_event()
+    );
+    $which_window->signal_connect(
+        destroy => sub { Gtk2->main_quit(); }
+    );
+    
+    $which_window->set_border_width(50);
+    $which_window->set_title('GHULS Authorization');
+    
+    my $choose = Gtk2::TextView->new();
+    my $choose_buffer = $choose->get_buffer();
+    my $login_button = Gtk2::Button->new('Use GitHub username and password');
+    my $code_button = Gtk2::Button->new3('Use GitHub authorization code');
+    
+    $choose_buffer->set_text('How would you like to authorize yourself with GHULS/GitHub?');
+    $login_button->signal_connect(
+        clicked => use_un_pw()
+    );
+    $code_button->signal_connect(
+        clicked => use_code()
+    );
+    
+    $which_window->add($choose);
+    $which_window->add($login_button);
+    $which_window->add($code_button);
+    $login_button->show();
+    $code_button->show();
+    $which_window->show_all();
+    
+    Gtk2->main();
+}
