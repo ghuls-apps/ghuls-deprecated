@@ -5,63 +5,32 @@ use strict;
 use Data::Dumper;
 use Net::GitHub::V3;
 use List::MoreUtils;
-use List::Util;
-use JSON;
+use List::Util qw/sum0/;
 use Term::ReadKey;
+use JSON;
 
 my $ERROR = $!;
 
 sub main {
     my $sum = 0;
-    my $login_loop_control = 0;
+    my @login_data = read_secure();
+    #if (scalar @login_data == 2) {
+        our $git = Net::GitHub::V3->new(
+            login => $login_data[0],
+            pass => $login_data[1]
+        );
+        analyze($login_data[2]);
+    # } else {
+        # our $git = Net::GitHub::V3->new(
+            # access_token => $login_data[0]
+        # );
+        # analyze($login_data[1]);
+    # }
 
-    while (42) {
-        print "Would you like to use an auth key or login? (1/2)\n";
-        my $authoruser = <>;
-        chomp $authoruser;
+}
 
-        #my @secure = read_secure();
-        if ($authoruser eq '1') {
-            $login_loop_control = 1;
-            print "Please enter your auth code. This will never be shown to anyone, not even the developer of this software: \n";
-            ReadMode 2;
-            my $auth = <>;
-            ReadMode 0;
-            chomp $auth;
-            our $git = Net::GitHub::V3->new(
-                access_token => $auth
-            ) or $login_loop_control = 0;
-        }
-        
-        if ($authoruser eq '2') {
-            $login_loop_control = 2;
-            print 'Please enter your username: ';
-            my $authuser = <>;
-            chomp $authuser;
-            print "Please enter your password. This will never be shown to anyone, not even the developer of this software: \n";
-            ReadMode 2;
-            my $pass = <>;
-            ReadMode 0;
-            chomp $pass;
-            our $git = Net::GitHub::V3->new(
-                login => $authuser,
-                pass => $pass
-            ) or $login_loop_control = 0;
-        }
-    
-        if ($authoruser ne '1' and $authoruser ne '2') {
-            $login_loop_control = 0;
-        }
-        
-        if ($login_loop_control == 1 or $login_loop_control == 2) {
-            last;
-        }
-    }
-
-    print 'Enter a username to analyze: ';
-    my $user = <>;
-    chomp $user;
-
+sub analyze {
+    my ($user) = @_;
     my $repos = $GHULS::git->repos;
     my @repos_list = $repos->list_user($user);
     my @forks;
@@ -74,31 +43,17 @@ sub main {
         } else {
             my %lang_names = $repos->languages($user, $repo->{name});
             $all_languages{$_} += $lang_names{$_} for keys %lang_names;
-
-            # Drop this if you don't need it any more
-            foreach my $lang_name (keys %lang_names) {
-                print "$repo->{name}: $lang_name $lang_names{$lang_name}\n";
-            }
         }
     }
 
-
-    my $num_langs = keys %all_languages;
-    my $join = join ', ', keys %all_languages;
-    print "$user has repositories written in $num_langs languages: $join\n";
-
-    my $all_sum = List::Util->sum0(values %all_languages);
-    print "Total: $all_sum\n";
-
+    my $all_sum = sum0(values %all_languages);
     my %percents = map { $_ => calc_percentage($all_languages{$_}, $all_sum) } keys %all_languages;
-
-    print "$_: $percents{$_}%\n" for keys %percents;
 
     #If necessary by the JavaScript, use %percents instead.
     my $json = encode_json \%all_languages;
 
     open my $fh, '>', "tmp/$user.json" or die $ERROR;
-    print $fh $json;
+    print $fh "\{\n\t\"langs\"\: $json\n\}";
     close $fh;
 }
 
@@ -110,7 +65,7 @@ sub calc_percentage {
 }
 
 sub read_secure {
-    my $file = 'secure.txt';
+    my $file = 'info.txt';
     open my $fh, '<', $file or die "Could not open '$file' $ERROR\n";
     my @lines = <$fh>;
     close $fh;
