@@ -1,6 +1,6 @@
 import Tkinter
 import tkMessageBox
-from pylab import figure, pie, show
+from pylab import figure, pie, show, title
 import subprocess
 import json
 
@@ -11,15 +11,16 @@ def graph(user, text, button):
     data = jsonresponse["langs"]
     langs = []
     bytes = []
-    for item in data:
-        lang = # something
+    num_langs = 0
+    for lang, byte in data.items():
         langs.append(lang)
-        byte = # something
         bytes.append(byte)
+        num_langs += 1
     pie(bytes, labels=langs)
     text.pack_forget()
     button.pack_forget()
     show()
+    title(user + '\'s Language Statistics')
     jsonfile.close()
 
 def run_perl(ut, pt, an, anb):
