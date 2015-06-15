@@ -23,25 +23,38 @@ def graph(user, text, button):
     title(user + '\'s Language Statistics')
     jsonfile.close()
 
-def run_perl(ut, pt, an, anb):
+def run_perl_with_login(ut, pt, an, anb):
     f = open("info.txt", 'w+')
     f.write(ut.get() + "\n" + pt.get() + "\n" + an.get())
     f.close()
-    subprocess.Popen(["perl", "index.pl"], stdout=subprocess.PIPE).wait();
+    subprocess.Popen(["perl", "index.pl"], stdout=subprocess.PIPE).wait()
     graph(an.get(), an, anb)
 
-def login_with_un(ut, pt, upb):
+def run_perl_with_code(act, user, button):
+    f = open("info.txt", 'w+')
+    f.write(act.get() + "\n" + user.get())
+    f.close()
+    subprocess.Popen(["perl", "index.pl"], stdout=subprocess.PIPE).wait()
+    graph(user.get(), act, button)
+
+def analyze_with_un(ut, pt, upb):
     top.wm_title("Choose GitHub user to analyze")
     ut.pack_forget()
     pt.pack_forget()
     upb.pack_forget()
     analyzetext = Tkinter.Entry(top)
-    analyzebutton = Tkinter.Button(top, text = "Analyze", command = lambda: run_perl(ut, pt, analyzetext, analyzebutton))
+    analyzebutton = Tkinter.Button(top, text = "Analyze", command = lambda: run_perl_with_login(ut, pt, analyzetext, analyzebutton))
     analyzetext.pack()
     analyzebutton.pack()
 
-def login_with_code():
-    tkMessageBox.showinfo("using code", "weee")
+def analyze_with_code(act, acb):
+    top.wm_title("Choose GitHub user to analyze")
+    act.pack_forget()
+    acb.pack_forget()
+    analyzetext = Tkinter.Entry(top)
+    analyzebutton = Tkinter.Button(top, text = "Analyze", command = lambda: run_perl_with_code(act, analyzetext, analyzebutton))
+    analyzetext.pack()
+    analyzebutton.pack()
 
 def auth_with_un():
     top.wm_title("Login with Username and Password")
@@ -49,7 +62,7 @@ def auth_with_un():
     authbutton.pack_forget()
     usernametext = Tkinter.Entry(top)
     passwordtext = Tkinter.Entry(top, show="*")
-    userpassbutton = Tkinter.Button(top, text = "Login", command = lambda: login_with_un(usernametext, passwordtext, userpassbutton))
+    userpassbutton = Tkinter.Button(top, text = "Login", command = lambda: analyze_with_un(usernametext, passwordtext, userpassbutton))
     usernametext.grid(row=0)
     passwordtext.grid(row=1)
     usernametext.pack()
@@ -57,7 +70,13 @@ def auth_with_un():
     userpassbutton.pack()
 
 def auth_with_code():
-    tkMessageBox.showinfo("using code", "weee")
+    top.wm_title("Login with Authorization Code")
+    loginbutton.pack_forget()
+    authbutton.pack_forget()
+    authcodetext = Tkinter.Entry(top, show="*")
+    authcodebutton = Tkinter.Button(top, text = "Authorize", command = lambda: analyze_with_code(authcodetext, authcodebutton))
+    authcodetext.pack()
+    authcodebutton.pack()
 
 top = Tkinter.Tk()
 top.wm_title("Pick Authorization Method")

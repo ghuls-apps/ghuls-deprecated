@@ -14,18 +14,18 @@ my $ERROR = $!;
 sub main {
     my $sum = 0;
     my @login_data = read_secure();
-    #if (scalar @login_data == 2) {
+    if (scalar @login_data == 3) {
         our $git = Net::GitHub::V3->new(
             login => $login_data[0],
             pass => $login_data[1]
         );
         analyze($login_data[2]);
-    # } else {
-        # our $git = Net::GitHub::V3->new(
-            # access_token => $login_data[0]
-        # );
-        # analyze($login_data[1]);
-    # }
+    } elsif (scalar @login_data == 2) {
+        our $git = Net::GitHub::V3->new(
+            access_token => $login_data[0]
+        );
+        analyze($login_data[1]);
+    }
 
 }
 
@@ -71,6 +71,10 @@ sub read_secure {
     close $fh;
     chomp @lines;
     return @lines;
+}
+
+sub count_lines {
+
 }
 
 main();
