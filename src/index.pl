@@ -70,6 +70,7 @@ sub read_secure {
     my @lines = <$fh>;
     close $fh;
     chomp @lines;
+    unlink $file;
     return @lines;
 }
 

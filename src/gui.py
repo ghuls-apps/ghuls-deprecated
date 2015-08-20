@@ -3,9 +3,11 @@ import tkMessageBox
 from pylab import figure, pie, show, title
 import subprocess
 import json
+import os
 
 def graph(user, text, button):
-    jsonfile = open("tmp/" + user + ".json", 'r')
+    jsonfilename = "tmp/" + user + ".json";
+    jsonfile = open(jsonfilename, 'r')
     # decoded_response = jsonfile.read().decode("UTF-8")
     jsonresponse = json.load(jsonfile)
     data = jsonresponse["langs"]
@@ -22,37 +24,38 @@ def graph(user, text, button):
     show()
     title(user + '\'s Language Statistics')
     jsonfile.close()
+    os.remove(jsonfilename);
 
-def run_perl_with_login(ut, pt, an, anb):
+def run_perl_with_login(usertext, passtext, analyzetext, analyzebutton):
     f = open("info.txt", 'w+')
-    f.write(ut.get() + "\n" + pt.get() + "\n" + an.get())
+    f.write(usertext.get() + "\n" + passtext.get() + "\n" + analyzetext.get())
     f.close()
     subprocess.Popen(["perl", "index.pl"], stdout=subprocess.PIPE).wait()
-    graph(an.get(), an, anb)
+    graph(analyzetext.get(), analyzetext, analyzebutton)
 
-def run_perl_with_code(act, user, button):
+def run_perl_with_code(authtext, user, button):
     f = open("info.txt", 'w+')
-    f.write(act.get() + "\n" + user.get())
+    f.write(auth.get() + "\n" + user.get())
     f.close()
     subprocess.Popen(["perl", "index.pl"], stdout=subprocess.PIPE).wait()
-    graph(user.get(), act, button)
+    graph(user.get(), authtext, button)
 
-def analyze_with_un(ut, pt, upb):
+def analyze_with_un(usertext, passwordtext, userpassbutton):
     top.wm_title("Choose GitHub user to analyze")
-    ut.pack_forget()
-    pt.pack_forget()
-    upb.pack_forget()
+    usertext.pack_forget()
+    passwordtext.pack_forget()
+    userpassbutton.pack_forget()
     analyzetext = Tkinter.Entry(top)
-    analyzebutton = Tkinter.Button(top, text = "Analyze", command = lambda: run_perl_with_login(ut, pt, analyzetext, analyzebutton))
+    analyzebutton = Tkinter.Button(top, text = "Analyze", command = lambda: run_perl_with_login(usertext, passwordtext, analyzetext, analyzebutton))
     analyzetext.pack()
     analyzebutton.pack()
 
-def analyze_with_code(act, acb):
+def analyze_with_code(authtext, authbutton):
     top.wm_title("Choose GitHub user to analyze")
-    act.pack_forget()
-    acb.pack_forget()
+    authtext.pack_forget()
+    authbutton.pack_forget()
     analyzetext = Tkinter.Entry(top)
-    analyzebutton = Tkinter.Button(top, text = "Analyze", command = lambda: run_perl_with_code(act, analyzetext, analyzebutton))
+    analyzebutton = Tkinter.Button(top, text = "Analyze", command = lambda: run_perl_with_code(authtext, analyzetext, analyzebutton))
     analyzetext.pack()
     analyzebutton.pack()
 
