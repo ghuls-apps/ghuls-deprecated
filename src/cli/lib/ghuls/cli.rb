@@ -2,6 +2,7 @@ require 'octokit'
 require 'optparse'
 require 'base64'
 require 'rainbow'
+require 'string-utility'
 
 module GHULS
   class CLI
@@ -116,6 +117,7 @@ module GHULS
       puts "Outputting language data for #{@opts[:get]}..."
       language_percentages.each do |l, p|
         color = get_color_for_language(l.to_s)
+        color = StringUtility.random_color_six if color.nil?
         puts Rainbow("#{l}: #{p}%").color(color)
       end
     end
