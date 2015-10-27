@@ -1,5 +1,7 @@
 require 'octokit'
 require 'optparse'
+require 'base64'
+require 'rainbow'
 
 module GHULS
   class CLI
@@ -46,6 +48,13 @@ module GHULS
               '-g, --get      The username/organization to analyze.'
 
       parse_options(args)
+      token = @opts[:token]
+      user = @opts[:user]
+      pass = @opts[:pass]
+      @gh = Octokit::Client.new(login: user, password: pass) if token.nil?
+      @gh = Octokit::Client.new(access_token: token)
+      encoded = @gh.contents('ozh/github-colors', path: 'colors.json')[:content]
+      @colors = JSON.parse(Base64.decode64(encoded))
     end
 
     # Whether or not the script should fail.
@@ -56,15 +65,6 @@ module GHULS
       true if @opts[:get].nil?
       true if @opts[:token].nil? && @opts[:user].nil?
       true if @opts[:token].nil? && @opts[:pass].nil?
-    end
-
-    # Configures the Octokit instance used by GHULS.
-    def configure
-      token = @opts[:token]
-      user = @opts[:user]
-      pass = @opts[:pass]
-      @gh = Octokit::Client.new(login: user, password: pass) if token.nil?
-      @gh = Octokit::Client.new(access_token: token)
     end
 
     # Gets the langauges and their bytes for the :get user.
@@ -96,12 +96,15 @@ module GHULS
       (part / whole) * 100
     end
 
+    def get_color_for_language(lang)
+      return @colors[lang]['color'] unless @colors[lang]['color'].nil?
+    end
+
     # Simply runs the program.
     def run
       puts @usage if failed?
       puts @help if @opts[:help]
       exit if failed?
-      configure
       languages = get_langs
       total = 0
       languages.each { |_, b| total += b }
@@ -112,7 +115,8 @@ module GHULS
       end
       puts "Outputting language data for #{@opts[:get]}..."
       language_percentages.each do |l, p|
-        puts "#{l}: #{p}%"
+        color = get_color_for_language(l.to_s)
+        puts Rainbow("#{l}: #{p}%").color(color)
       end
     end
   end
