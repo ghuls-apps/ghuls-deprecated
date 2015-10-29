@@ -16,7 +16,8 @@ body {
 
 input[type="text"] {
   font-family: "LatoWebLight";
-  position: absolute;
+  margin: 0 auto;
+  display: block;
   padding: 3px;
   border: 1px solid;
   border-color: #95A898;

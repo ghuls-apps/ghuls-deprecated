@@ -3,7 +3,7 @@
 
 $LOAD_PATH.unshift(File.dirname(File.realpath(__FILE__)) + '/../lib')
 
-require 'ghuls'
+require_relative '../lib/ghuls'
 require 'benchmark'
 
 cli = GHULS::CLI.new
