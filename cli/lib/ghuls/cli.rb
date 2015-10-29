@@ -62,12 +62,18 @@ module GHULS
       puts @usage if failed?
       puts @help if @opts[:help]
       exit if failed?
-      puts "Outputting language data for #{@opts[:get]}..."
-      percents = Utilities.analyze(@gh, @opts[:get])
-      percents.each do |l, p|
-        color = Utilities.get_color_for_language(l.to_s, @colors)
-        color = StringUtility.random_color_six if color.nil?
-        puts Rainbow("#{l}: #{p}%").color(color)
+      puts "Getting language data for #{@opts[:get]}..."
+      percents = Utilities.analyze(@opts[:get], @gh)
+      if percents
+        percents.each do |l, p|
+          color = Utilities.get_color_for_language(l.to_s, @colors)
+          color = StringUtility.random_color_six if color.nil?
+          puts Rainbow("#{l}: #{p}%").color(color)
+        end
+      else
+        puts "Sorry, we could not find anyone under the name #{@opts[:get]}. " \
+             'Please try again with a user that exists.'
+        exit
       end
     end
   end

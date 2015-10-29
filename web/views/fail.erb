@@ -1,0 +1,9 @@
+<body>
+    <title>User not Found</title>
+    <link rel="stylesheet" href="/styles.css">
+    <h1>Sorry, we could not find anyone under the name <%= user %></h1>
+    <h1>Please try again with a user that exists</h1>
+    <form action="/analyze" method="get">
+        <input type="text" name="user" placeholder="Analyze another user">
+    </form>
+</body>

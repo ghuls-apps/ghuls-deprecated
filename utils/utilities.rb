@@ -26,8 +26,12 @@ module Utilities
   end
 
   def self.user_exists?(username, github)
-    return true unless github.user(username).nil?
-    nil
+    begin
+      github.user(username).is_a?(Octokit::NotFound)
+    rescue Octokit::NotFound
+      return false
+    end
+    true
   end
 
   # Gets the langauges and their bytes for the :user.
@@ -71,14 +75,18 @@ module Utilities
   end
 
   def self.analyze(username, github)
-    languages = get_langs(username, github)
-    total = 0
-    languages.each { |_, b| total += b }
-    language_percentages = {}
-    languages.each do |l, b|
-      percent = Utilities.calculate_percent(b, total.to_f)
-      language_percentages[l] = percent.round(2)
+    if user_exists?(username, github)
+      languages = get_langs(username, github)
+      total = 0
+      languages.each { |_, b| total += b }
+      language_percentages = {}
+      languages.each do |l, b|
+        percent = Utilities.calculate_percent(b, total.to_f)
+        language_percentages[l] = percent.round(2)
+      end
+      language_percentages
+    else
+      false
     end
-    language_percentages
   end
 end
