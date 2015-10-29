@@ -4,3 +4,4 @@ tmp/
 *.nw
 *.zip
 info.txt
+*.gem
