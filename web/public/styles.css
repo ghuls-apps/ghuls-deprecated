@@ -14,6 +14,19 @@ body {
   background-color: #006B54;
 }
 
+h1 {
+  font-family: "LatoWebLight";
+  text-align: center;
+  font-size: 55px;
+  font-weight: 100;
+}
+
+p {
+  font-family: "LatoWebLight";
+  text-align: center;
+  font-size: 30px;
+}
+
 input[type="text"] {
   font-family: "LatoWebLight";
   margin: 0 auto;
@@ -23,5 +36,13 @@ input[type="text"] {
   border-color: #95A898;
   font-size: 55px;
   font-weight: 100;
-  background-color: #BBD2BE;
+  background-color: #4C9787;
+}
+
+#chart {
+  border: 2px solid;
+  border-color: #7FB5A9;
+  margin-left: 25%;
+  margin-right: 25%;
+  display: block;
 }
