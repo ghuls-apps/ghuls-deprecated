@@ -1,5 +1,4 @@
 require 'octokit'
-require 'optparse'
 require 'base64'
 require 'rainbow'
 require 'string-utility'

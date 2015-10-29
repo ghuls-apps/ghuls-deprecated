@@ -6,13 +6,15 @@ Gem::Specification.new do |s|
   s.description = 'Getting GitHub repository language data by user!'
   s.email = 'elifosterwy@gmail.com'
   s.files = [
-    'lib/ghuls.rb',
-    'lib/ghuls/cli.rb',
-    'bin/ghuls'
+    'cli/lib/ghuls.rb',
+    'cli/lib/ghuls/cli.rb',
+    'cli/bin/ghuls',
+    'utils/utilities.rb'
   ]
   s.executables = 'bin/ghuls'
   s.homepage = 'http://github.com/elifoster/ghuls'
   s.summary = 'GHULS: GitHub User Language Statistics'
   s.add_runtime_dependency('octokit')
-  s.add_runtime_dependency('require_all')
+  s.add_runtime_dependency('rainbow')
+  s.add_runtime_dependency('string-utility')
 end
