@@ -15,8 +15,7 @@ body {
 }
 
 input[type="text"] {
-  font-family: "Lato";
-  font: "Lato";
+  font-family: "LatoWebLight";
   position: absolute;
   padding: 3px;
   border: 1px solid;
