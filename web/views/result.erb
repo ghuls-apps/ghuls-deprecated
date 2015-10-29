@@ -1,0 +1,15 @@
+<body>
+    <title>Language Statistics for <%= user %></title>
+    <h1><%= user %></h1>
+    <link rel="stylesheet" href="/styles.css">
+    <script src="//www.google.com/jsapi"></script>
+    <script src="chartkick.js"></script>
+    <%= pie_chart(data, colors: colors, id: 'chart', library: {
+          backgroundColor: "#4c9787"
+        }) %>
+    <p><%= user %> is a <%= adjective %> <%= demonym %></p>
+    <br /><br /><br /><br /><br /><br />
+    <form action="/analyze" method="get">
+        <input type="text" name="user" placeholder="Analyze another user">
+    </form>
+</body>
