@@ -62,7 +62,6 @@ get '/analyze' do
     else
       variables[:org_exists] = false
     end
-    puts variables
     erb :result, locals: variables
   else
     erb :fail, locals: { user: user }
