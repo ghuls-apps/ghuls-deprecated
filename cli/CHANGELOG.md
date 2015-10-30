@@ -1,5 +1,8 @@
 # Changelog
 ## Version 1
+### Version 1.0.2
+* Actually fix load path stuff again.
+
 ### Version 1.0.1
 * Fix load path stuff.
 
