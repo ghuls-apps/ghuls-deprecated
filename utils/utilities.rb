@@ -1,4 +1,5 @@
 require 'octokit'
+require 'string-utility'
 
 module Utilities
   # Gets the Octokit and colors for the program.
@@ -12,8 +13,12 @@ module Utilities
     user = opts[:user]
     gh = Octokit::Client.new(login: user, password: pass) if token.nil?
     gh = Octokit::Client.new(access_token: token) unless token.nil?
-    encoded = gh.contents('ozh/github-colors', path: 'colors.json')[:content]
-    colors = JSON.parse(Base64.decode64(encoded))
+    begin
+      encoded = gh.contents('ozh/github-colors', path: 'colors.json')[:content]
+      colors = JSON.parse(Base64.decode64(encoded))
+    rescue Octokit::Unauthorized
+      return false
+    end
     { git: gh, colors: colors }
   end
 
@@ -25,13 +30,46 @@ module Utilities
     full.at(full.index(single) + 1)
   end
 
+  # Gets whether or not the user exists.
+  # @param username [String] The user to check
+  # @param github [Octokit::Client] The instance of Octokit to use.
+  # @return [Boolean] True if it does, false if it doesn't.
   def self.user_exists?(username, github)
     begin
-      github.user(username).is_a?(Octokit::NotFound)
+      github.user(username)
     rescue Octokit::NotFound
       return false
     end
     true
+  end
+
+  # Returns the repos in the user's organizations that they have actually
+  #   contributed to.
+  # @param username [String] See #user_exists?
+  # @param github [Octokit::Client] See #user_exists?
+  # @return [Array] All the repository full names that the user has contributed
+  #   to.
+  def self.get_org_repos(username, github)
+    orgs = github.organizations(username)
+    repos = []
+    orgs.each do |o|
+      repos += github.repositories(o[:login])
+    end
+    true_repos = []
+    repos.each do |r|
+      begin
+        is_collaborator = github.collaborator?(r[:full_name], username)
+      rescue Octokit::Forbidden
+        next
+      end
+      if is_collaborator
+        next if r[:fork]
+        true_repos.push(r[:full_name])
+      else
+        next
+      end
+    end
+    true_repos
   end
 
   # Gets the langauges and their bytes for the :user.
@@ -39,12 +77,29 @@ module Utilities
   # @param github [OctoKit::Client] The instance of Octokit::Client.
   # @return [Hash] The languages and their bytes, as formatted as
   #   { :Ruby => 129890, :CoffeeScript => 5970 }
-  def self.get_langs(username, github)
+  def self.get_user_langs(username, github)
     repos = github.repositories(username)
     langs = {}
     repos.each do |r|
       next if r[:fork]
       repo_langs = github.languages(r[:full_name])
+      repo_langs.each do |l, b|
+        if langs[l].nil?
+          langs[l] = b
+        else
+          existing = langs[l]
+          langs[l] = existing + b
+        end
+      end
+    end
+    langs
+  end
+
+  def self.get_org_langs(username, github)
+    org_repos = get_org_repos(username, github)
+    langs = {}
+    org_repos.each do |r|
+      repo_langs = github.languages(r)
       repo_langs.each do |l, b|
         if langs[l].nil?
           langs[l] = b
@@ -71,20 +126,39 @@ module Utilities
   # @return [String] The 6 digit hexidecimal color.
   # @return [Nil] If there is no defined color for the language.
   def self.get_color_for_language(lang, colors)
-    return colors[lang]['color'] unless colors[lang]['color'].nil?
+    if colors[lang]['color'].nil?
+      return StringUtility.random_color_six
+    else
+      return colors[lang]['color']
+    end
   end
 
-  def self.analyze(username, github)
+  def self.get_language_percentages(langs)
+    total = 0
+    langs.each { |_, b| total += b }
+    lang_percents = {}
+    langs.each do |l, b|
+      percent = Utilities.calculate_percent(b, total.to_f)
+      lang_percents[l] = percent.round(2)
+    end
+    lang_percents
+  end
+
+  def self.analyze_orgs(username, github)
     if user_exists?(username, github)
-      languages = get_langs(username, github)
-      total = 0
-      languages.each { |_, b| total += b }
-      language_percentages = {}
-      languages.each do |l, b|
-        percent = Utilities.calculate_percent(b, total.to_f)
-        language_percentages[l] = percent.round(2)
-      end
-      language_percentages
+      langs = get_org_langs(username, github)
+      return false if langs.empty?
+      get_language_percentages(langs)
+    else
+      false
+    end
+  end
+
+  def self.analyze_user(username, github)
+    if user_exists?(username, github)
+      langs = get_user_langs(username, github)
+      return false if langs.empty?
+      get_language_percentages(langs)
     else
       false
     end

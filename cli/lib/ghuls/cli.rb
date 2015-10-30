@@ -1,7 +1,6 @@
 require 'octokit'
 require 'base64'
 require 'rainbow'
-require 'string-utility'
 require_relative "#{Dir.pwd}/utils/utilities"
 
 module GHULS
@@ -56,24 +55,43 @@ module GHULS
       true if @opts[:token].nil? && @opts[:pass].nil?
     end
 
+    def output(percents)
+      percents.each do |l, p|
+        color = Utilities.get_color_for_language(l.to_s, @colors)
+        puts Rainbow("#{l}: #{p}%").color(color)
+      end
+    end
+
+    def fail_after_analyze
+      puts 'Sorry, something went wrong.'
+      puts "We either could not find anyone under the name #{@opts[:get]}, " \
+           'or we could not find any data for them.'
+      puts 'Please try again with a different user. If you believe this is ' \
+           'an error, please report it to the developer.'
+      exit
+    end
+
     # Simply runs the program.
     def run
       puts @usage if failed?
       puts @help if @opts[:help]
       exit if failed?
       puts "Getting language data for #{@opts[:get]}..."
-      percents = Utilities.analyze(@opts[:get], @gh)
-      if percents
-        percents.each do |l, p|
-          color = Utilities.get_color_for_language(l.to_s, @colors)
-          color = StringUtility.random_color_six if color.nil?
-          puts Rainbow("#{l}: #{p}%").color(color)
+      user_percents = Utilities.analyze_user(@opts[:get], @gh)
+      org_percents = Utilities.analyze_orgs(@opts[:get], @gh)
+
+      if user_percents != false
+        output(user_percents)
+        if org_percents != false
+          puts 'Getting language data for their organizations...'
+          output(org_percents)
+        else
+          exit
         end
       else
-        puts "Sorry, we could not find anyone under the name #{@opts[:get]}. " \
-             'Please try again with a user that exists.'
-        exit
+        fail_after_analyze
       end
+      exit
     end
   end
 end

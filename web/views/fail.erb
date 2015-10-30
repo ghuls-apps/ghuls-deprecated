@@ -1,8 +1,9 @@
 <body>
     <title>User not Found</title>
     <link rel="stylesheet" href="/styles.css">
-    <h1>Sorry, we could not find anyone under the name <%= user %></h1>
-    <h1>Please try again with a user that exists</h1>
+    <h1>Sorry, something went wrong.</h1>
+    <h1>We either could not find anyone under the name <%= user %>, or we could not find any data for them.</h1>
+    <h1>Please try again with a different user. If you believe this is an error, please report it to the developer.</h1>
     <form action="/analyze" method="get">
         <input type="text" name="user" placeholder="Analyze another user">
     </form>

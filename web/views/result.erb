@@ -1,13 +1,25 @@
 <body>
-    <title>Language Statistics for <%= user %></title>
-    <h1><%= user %></h1>
     <link rel="stylesheet" href="/styles.css">
     <script src="//www.google.com/jsapi"></script>
     <script src="chartkick.js"></script>
-    <%= pie_chart(data, colors: colors, id: 'chart', library: {
-          backgroundColor: "#4c9787"
+
+    <title>Language Statistics for <%= user %></title>
+
+    <h1><%= user %></h1>
+    <%= pie_chart(user_data, colors: user_colors, id: 'user_chart', library: {
+          backgroundColor: "#4C9787"
         }) %>
-    <p><%= user %> is a <%= adjective %> <%= demonym %></p>
+    <p><%= user %> by themselves is <%= user_adjective %> <%= user_demonym %></p>
+
+    <% if org_exists %>
+      <%= pie_chart(org_data, colors: org_colors, id: 'org_chart', library: {
+            backgroundColor: "#4C9787"
+        }) %>
+      <p><%= user %> when teamed up with others becomes <%= org_adjective %> <%= org_demonym %></p>
+    <% else %>
+      <p>Unfortunately, <%= user %> has not contributed to any organizations :(.</p>
+    <% end %>
+
     <br /><br /><br /><br /><br /><br />
     <form action="/analyze" method="get">
         <input type="text" name="user" placeholder="Analyze another user">

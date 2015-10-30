@@ -39,7 +39,7 @@ input[type="text"] {
   background-color: #4C9787;
 }
 
-#chart {
+#user_chart, #org_chart {
   border: 2px solid;
   border-color: #7FB5A9;
   margin-left: 25%;
