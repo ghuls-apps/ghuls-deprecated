@@ -1,7 +1,7 @@
 require 'octokit'
 require 'base64'
 require 'rainbow'
-require_relative "#{Dir.pwd}/utils/utilities"
+require_relative '../../../utils/utilities'
 
 module GHULS
   class CLI
@@ -42,7 +42,8 @@ module GHULS
       parse_options(args)
       config = Utilities.configure_stuff(@opts)
       if config == false
-        puts 'Error: authentication failed, check your username/password or token'
+        puts 'Error: authentication failed, check your username/password ' \
+             ' or token'
         exit
       end
       @gh = config[:git]
