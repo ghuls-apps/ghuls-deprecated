@@ -41,6 +41,10 @@ module GHULS
 
       parse_options(args)
       config = Utilities.configure_stuff(@opts)
+      if config == false then
+        puts 'Error: authentication failed, check your username/password or token'
+        exit
+      end
       @gh = config[:git]
       @colors = config[:colors]
     end
