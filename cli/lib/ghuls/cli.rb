@@ -1,6 +1,7 @@
 require 'octokit'
 require 'base64'
 require 'rainbow'
+require 'progress_bar'
 require_relative '../../../utils/utilities'
 
 module GHULS
@@ -15,8 +16,13 @@ module GHULS
         when '-pw', '--pass' then @opts[:pass] = Utilities.get_next(arg, args)
         when '-t', '--token' then @opts[:token] = Utilities.get_next(arg, args)
         when '-g', '--get' then @opts[:get] = Utilities.get_next(arg, args)
+        when '-d', '--debug' then @opts[:debug] = true
         end
       end
+    end
+
+    def increment
+      @bar.increment! if @opts[:debug]
     end
 
     # Creates a new instance of GHULS::CLI
@@ -27,12 +33,14 @@ module GHULS
         user: nil,
         pass: nil,
         token: nil,
-        get: nil
+        get: nil,
+        debug: nil
       }
 
       @usage = 'Usage: ghuls [-h] [-un] username [-pw] password [-t] token ' \
                '[-g] username'
       @help = "-h, --help     Show helpful information.\n" \
+              "-d, --debug    Provide debug information.\n" \
               "-un, --user    The username to log in as.\n" \
               "-pw, --pass    The password for that username.\n" \
               '-t, --token    The token to log in as. This will be preferred ' \
@@ -40,7 +48,10 @@ module GHULS
               '-g, --get      The username/organization to analyze.'
 
       parse_options(args)
+      @bar = ProgressBar.new(5) if @opts[:debug]
+      increment
       config = Utilities.configure_stuff(@opts)
+      increment
       if config == false
         puts 'Error: authentication failed, check your username/password ' \
              ' or token'
@@ -81,11 +92,14 @@ module GHULS
       puts @usage if failed?
       puts @help if @opts[:help]
       exit if failed?
-      puts "Getting language data for #{@opts[:get]}..."
+      increment
       user_percents = Utilities.analyze_user(@opts[:get], @gh)
+      increment
       org_percents = Utilities.analyze_orgs(@opts[:get], @gh)
+      increment
 
       if user_percents != false
+        puts "Getting language data for #{@opts[:get]}..."
         output(user_percents)
         if org_percents != false
           puts 'Getting language data for their organizations...'

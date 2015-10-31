@@ -1,9 +1,12 @@
 # Changelog
 ## Version 1
+### Version 1.3.0
+* New -d --debug option to show a progress bar.
+
 ### Version 1.2.0
 * Fix require_relative statement for utilities.rb, so it now actually works outside of the project root.
 * Better error handling for authentication error (ProgramFOX)
-* You can now get organization data for people other than yourself. It now checks if the user is a contributor to the org repos, rather than a collaborator, which was causing some issues. (#19.)
+* You can now get organization data for people other than yourself. It now checks if the user is a contributor to the org repos, rather than a collaborator, which was causing issues. (#19.)
 
 ### Version 1.1.0
 * Organizations that the -g user contributed to are now supported.
