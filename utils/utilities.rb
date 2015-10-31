@@ -57,16 +57,14 @@ module Utilities
     end
     true_repos = []
     repos.each do |r|
-      begin
-        is_collaborator = github.collaborator?(r[:full_name], username)
-      rescue Octokit::Forbidden
-        next
-      end
-      if is_collaborator
-        next if r[:fork]
-        true_repos.push(r[:full_name])
-      else
-        next
+      next if r[:fork]
+      contributors = github.contributors(r[:full_name])
+      contributors.each do |c|
+        if c[:login] == username
+          true_repos.push(r[:full_name])
+        else
+          next
+        end
       end
     end
     true_repos
