@@ -60,7 +60,7 @@ module Utilities
       next if r[:fork]
       contributors = github.contributors(r[:full_name])
       contributors.each do |c|
-        if c[:login] == username
+        if c[:login].casecmp(username).nonzero?
           true_repos.push(r[:full_name])
         else
           next
