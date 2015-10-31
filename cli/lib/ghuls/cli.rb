@@ -38,14 +38,14 @@ module GHULS
       }
 
       @usage = 'Usage: ghuls [-h] [-un] username [-pw] password [-t] token ' \
-               '[-g] username'
+               '[-g] username [-d] debug'
       @help = "-h, --help     Show helpful information.\n" \
               "-d, --debug    Provide debug information.\n" \
               "-un, --user    The username to log in as.\n" \
               "-pw, --pass    The password for that username.\n" \
               '-t, --token    The token to log in as. This will be preferred ' \
               "over username and password authentication.\n" \
-              '-g, --get      The username/organization to analyze.'
+              "-g, --get      The username/organization to analyze.\n"
 
       parse_options(args)
       @bar = ProgressBar.new(5) if @opts[:debug]
@@ -65,7 +65,6 @@ module GHULS
     # @return [Boolean] False if it did not fail, true if it did.
     def failed?
       false if @opts[:help]
-
       true if @opts[:get].nil?
       true if @opts[:token].nil? && @opts[:user].nil?
       true if @opts[:token].nil? && @opts[:pass].nil?
