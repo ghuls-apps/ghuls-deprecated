@@ -38,7 +38,7 @@ module GHULS
       }
 
       @usage = 'Usage: ghuls [-h] [-un] username [-pw] password [-t] token ' \
-               '[-g] username [-d] debug'
+               '[-g] username [-d]'
       @help = "-h, --help     Show helpful information.\n" \
               "-d, --debug    Provide debug information.\n" \
               "-un, --user    The username to log in as.\n" \
