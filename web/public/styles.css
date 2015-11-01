@@ -39,6 +39,14 @@ input[type="text"] {
   background-color: #4C9787;
 }
 
+a[href="/analyze-random"] {
+  font-family: "LatoWebLight";
+  font-size: 55px;
+  font-weight: 100;
+  display: block;
+  text-align: center;
+}
+
 #user_chart, #org_chart {
   border: 2px solid;
   border-color: #7FB5A9;
