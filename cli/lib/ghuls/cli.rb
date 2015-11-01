@@ -17,6 +17,7 @@ module GHULS
         when '-t', '--token' then @opts[:token] = Utilities.get_next(arg, args)
         when '-g', '--get' then @opts[:get] = Utilities.get_next(arg, args)
         when '-d', '--debug' then @opts[:debug] = true
+        when '-r', '--random' then @opts[:random] = true
         end
       end
     end
@@ -38,14 +39,15 @@ module GHULS
       }
 
       @usage = 'Usage: ghuls [-h] [-un] username [-pw] password [-t] token ' \
-               '[-g] username [-d]'
+               '[-g] username [-r] [-d]'
       @help = "-h, --help     Show helpful information.\n" \
               "-d, --debug    Provide debug information.\n" \
               "-un, --user    The username to log in as.\n" \
               "-pw, --pass    The password for that username.\n" \
               '-t, --token    The token to log in as. This will be preferred ' \
               "over username and password authentication.\n" \
-              "-g, --get      The username/organization to analyze.\n"
+              "-g, --get      The username/organization to analyze.\n" \
+              "-r, --random   Show information about a random user.\n"
 
       parse_options(args)
       @bar = ProgressBar.new(5) if @opts[:debug]
@@ -91,14 +93,20 @@ module GHULS
       puts @usage if failed?
       puts @help if @opts[:help]
       exit if failed?
+      if @opts[:random]
+        get = Utilities.get_random_username(@gh)
+        puts "Random user chosen: #{get}"
+      else
+        get = @opts[:get]
+      end
       increment
-      user_percents = Utilities.analyze_user(@opts[:get], @gh)
+      user_percents = Utilities.analyze_user(get, @gh)
       increment
-      org_percents = Utilities.analyze_orgs(@opts[:get], @gh)
+      org_percents = Utilities.analyze_orgs(get, @gh)
       increment
 
       if user_percents != false
-        puts "Getting language data for #{@opts[:get]}..."
+        puts "Getting language data for #{get}..."
         output(user_percents)
         if org_percents != false
           puts 'Getting language data for their organizations...'

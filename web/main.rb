@@ -13,7 +13,14 @@ get '/' do
 end
 
 get '/analyze' do
-  user = params[:user]
+  analyze(params[:user], gh, demonyms, adjective_path)
+end
+
+get '/analyze-random' do
+  analyze(Utilities.get_random_username(gh[:git]), gh, demonyms, adjective_path)
+end
+
+def analyze(user, gh, demonyms, adjective_path)
   user_data = Utilities.analyze_user(user, gh[:git])
   org_data = Utilities.analyze_orgs(user, gh[:git])
   if user_data != false

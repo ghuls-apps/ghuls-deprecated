@@ -161,4 +161,9 @@ module Utilities
       false
     end
   end
+
+  def self.get_random_username(github)
+    since = rand(45336497)
+    return github.all_repositories({ since: since })[0][:owner][:login]
+  end
 end
