@@ -9,7 +9,7 @@
     <%= pie_chart(user_data, colors: user_colors, id: 'user_chart', library: {
           backgroundColor: "#4C9787"
         }) %>
-    <p><%= user %> by themselves is <%= user_adjective %> <%= user_demonym %></p>
+    <p><%= user %> by themself is <%= user_adjective %> <%= user_demonym %></p>
 
     <% if org_exists %>
       <%= pie_chart(org_data, colors: org_colors, id: 'org_chart', library: {
