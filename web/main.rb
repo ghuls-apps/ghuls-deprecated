@@ -4,8 +4,7 @@ require 'yaml'
 require 'string-utility'
 require_relative '../utils/utilities'
 
-gh = Utilities.configure_stuff(token: '43be64d8b5a04fbe890209edb0c0fb1b3e066655')
-# @gh = Utilities.configure_stuff(token: ENV['GHULS_TOKEN'])
+gh = Utilities.configure_stuff(token: ENV['GHULS_TOKEN'])
 demonyms = YAML.load_file("#{Dir.pwd}/web/public/demonyms.yml")
 adjective_path = "#{Dir.pwd}/web/public/adjectives.txt"
 
