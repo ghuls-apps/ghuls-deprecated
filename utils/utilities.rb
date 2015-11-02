@@ -1,5 +1,6 @@
 require 'octokit'
 require 'string-utility'
+require 'open-uri'
 
 module Utilities
   # Gets the Octokit and colors for the program.
@@ -124,7 +125,7 @@ module Utilities
   # @return [String] The 6 digit hexidecimal color.
   # @return [Nil] If there is no defined color for the language.
   def self.get_color_for_language(lang, colors)
-    if colors[lang]['color'].nil?
+    if colors[lang].nil? || colors[lang]['color'].nil?
       return StringUtility.random_color_six
     else
       return colors[lang]['color']
@@ -160,5 +161,18 @@ module Utilities
     else
       false
     end
+  end
+
+  using StringUtility
+  def self.get_random_user(github)
+    source = open('https://github.com/search?utf8=%E2%9C%93&q=repos%3A%3E-1&t' \
+                  'ype=Users&ref=searchresults').read
+    has_repos = false
+    while has_repos == false
+      userid = rand(source[/Showing (.*?) available users/, 1].to_i_separated)
+      user = github.user(userid)[:login]
+      has_repos = true unless get_user_langs(user, github).empty?
+    end
+    user
   end
 end
