@@ -4,7 +4,8 @@ require 'yaml'
 require 'string-utility'
 require_relative '../utils/utilities'
 
-gh = Utilities.configure_stuff(token: ENV['GHULS_TOKEN'])
+gh = Utilities.configure_stuff(token: '43be64d8b5a04fbe890209edb0c0fb1b3e066655')
+# @gh = Utilities.configure_stuff(token: ENV['GHULS_TOKEN'])
 demonyms = YAML.load_file("#{Dir.pwd}/web/public/demonyms.yml")
 adjective_path = "#{Dir.pwd}/web/public/adjectives.txt"
 
@@ -13,7 +14,15 @@ get '/' do
 end
 
 get '/analyze' do
-  user = params[:user]
+  if params[:user].nil?
+    user = Utilities.get_random_user(gh[:git])
+  else
+    user = params[:user]
+  end
+  analyze(user, gh, demonyms, adjective_path)
+end
+
+def analyze(user, gh, demonyms, adjective_path)
   user_data = Utilities.analyze_user(user, gh[:git])
   org_data = Utilities.analyze_orgs(user, gh[:git])
   if user_data != false

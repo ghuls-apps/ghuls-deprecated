@@ -37,6 +37,28 @@ input[type="text"] {
   font-size: 55px;
   font-weight: 100;
   background-color: #4C9787;
+  text-align: center;
+  width: 50%;
+}
+
+a.btn, a:link.btn, a:visited.btn, a:hover.btn, a:active.btn {
+  font-family: "LatoWebLight";
+  margin: 0 auto;
+  display: block;
+  padding: 3px;
+  background-color: #4C9787;
+  border-color: #95A898;
+  border: 1px solid;
+  font-size: 55px;
+  font-weight: 100;
+  text-align: center;
+  color: #22453D;
+  width: 50%;
+}
+
+a {
+  text-decoration: none;
+  color: #000;
 }
 
 #user_chart, #org_chart {
