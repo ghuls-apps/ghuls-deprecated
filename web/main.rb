@@ -14,12 +14,10 @@ end
 
 get '/analyze' do
   if params[:user].nil?
-    user = Utilities.get_random_user(gh[:git])
-    redirect to("/analyze?user=#{user}")
-  else
-    user = params[:user]
+    random = Utilities.get_random_user(gh[:git])
+    redirect to("/analyze?user=#{random}")
   end
-  analyze(user, gh, demonyms, adjective_path)
+  analyze(params[:user], gh, demonyms, adjective_path)
 end
 
 def analyze(user, gh, demonyms, adjective_path)
